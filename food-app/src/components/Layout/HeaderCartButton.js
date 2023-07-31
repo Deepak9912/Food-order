@@ -1,19 +1,36 @@
-import { useContext } from 'react';
+import { useContext, useEffect, useState } from 'react';
 
 import CartIcon from '../Cart/CartIcon';
-import classes from './HeaderCartButton.module.css';
 import CartContext from '../../store/cart-context';
+import classes from './HeaderCartButton.module.css';
 
 const HeaderCartButton = (props) => {
+  const [btnHighlighted, setHighlighted] = useState(false)
   const cartCtx = useContext(CartContext);
 
-  const numberOfCartItems = cartCtx.items.reduce((curNumber, item) => {
+  const {items} = cartCtx;
+  const numberOfCartItems = items.reduce((curNumber, item) => {
     return curNumber + item.amount;
   }, 0);
-  // reducde is built in method, allows us to transfer array into a single value
+
+  const btnClasses = `${classes.button} ${btnHighlighted ? classes.bump : ''}`;
+
+  useEffect(() => {
+    if(items.length === 0){
+      return;
+    }
+    setHighlighted(true);
+    const timer = setTimeout(() => {
+      setHighlighted(false);
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [items]);
 
   return (
-    <button className={classes.button} onClick={props.onClick}>
+    <button className={btnClasses} onClick={props.onClick}>
       <span className={classes.icon}>
         <CartIcon />
       </span>
