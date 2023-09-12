@@ -41,8 +41,14 @@ const Checkout = (props) => {
 
     if(!formIsValid){
         return;
-
-        //submit card data
+        //card data submission
+        props.onConfirm({
+            name: enteredName,
+            street: enteredStreet,
+            city: enteredcity,
+            postal: enteredPostal,
+        }
+        )
     }
 
   };
